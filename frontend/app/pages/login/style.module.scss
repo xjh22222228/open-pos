@@ -1,0 +1,12 @@
+.login {
+  width: 100vw;
+  height: 100vh;
+  background-image: url('@/assets/imgs/login_bg.jpeg');
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 15px;
+  overflow: hidden;
+}
