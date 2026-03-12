@@ -1,100 +1,87 @@
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons'
+import { useState, useEffect } from 'react'
 import type { MenuProps } from 'antd'
 import { Menu } from 'antd'
-
-type MenuItem = Required<MenuProps>['items'][number]
-
-const items: MenuItem[] = [
-  {
-    key: 'sub1',
-    label: 'Navigation One',
-    icon: <MailOutlined />,
-    children: [
-      {
-        key: 'g1',
-        label: 'Item 1',
-        type: 'group',
-        children: [
-          { key: '1', label: 'Option 1' },
-          { key: '2', label: 'Option 2' },
-        ],
-      },
-      {
-        key: 'g2',
-        label: 'Item 2',
-        type: 'group',
-        children: [
-          { key: '3', label: 'Option 3' },
-          { key: '4', label: 'Option 4' },
-        ],
-      },
-    ],
-  },
-  {
-    key: 'sub2',
-    label: 'Navigation Two',
-    icon: <AppstoreOutlined />,
-    children: [
-      { key: '5', label: 'Option 5' },
-      { key: '6', label: 'Option 6' },
-      {
-        key: 'sub3',
-        label: 'Submenu',
-        children: [
-          { key: '7', label: 'Option 7' },
-          { key: '8', label: 'Option 8' },
-        ],
-      },
-    ],
-  },
-  {
-    type: 'divider',
-  },
-  {
-    key: 'sub4',
-    label: 'Navigation Three',
-    icon: <SettingOutlined />,
-    children: [
-      { key: '9', label: 'Option 9' },
-      { key: '10', label: 'Option 10' },
-      { key: '11', label: 'Option 11' },
-      { key: '12', label: 'Option 12' },
-    ],
-  },
-  {
-    key: 'grp',
-    label: 'Group',
-    type: 'group',
-    children: [
-      { key: '13', label: 'Option 13' },
-      { key: '14', label: 'Option 14' },
-    ],
-  },
-]
+import useSidebarStore from '~/stores/sidebarStore'
+import classNames from 'classnames'
+import useTabStore from '~/stores/tabStore'
+import { useNavigate } from 'react-router'
 
 export default function Sidebar() {
+  const openSidebar = useSidebarStore((state) => state.openSidebar)
+  const sidebarMenus = useSidebarStore((state) => state.sidebarMenus)
+  const tabStore = useTabStore()
+  const navigate = useNavigate()
+  const [openKeys, setOpenKeys] = useState<string[]>([])
+
   const onClick: MenuProps['onClick'] = (e) => {
-    console.log('click ', e)
+    if (tabStore.tabActiveKey !== e.key) {
+      tabStore.addTab(e.key)
+      navigate(e.key)
+    }
+  }
+
+  // 获取当前激活菜单项的父菜单 keys
+  const getOpenKeys = (menus: any, activeKey: string): string[] => {
+    const openKeys: string[] = []
+    const findKeys = (items: any, parents: string[] = []): boolean => {
+      for (const item of items) {
+        if (item && typeof item === 'object' && 'key' in item) {
+          const currentParents = [...parents, item.key as string]
+          if (item.key === activeKey) {
+            openKeys.push(...parents)
+            return true
+          }
+          if (item.children) {
+            if (findKeys(item.children, currentParents)) {
+              openKeys.push(item.key as string)
+              return true
+            }
+          }
+        }
+      }
+      return false
+    }
+    findKeys(menus)
+    return openKeys
+  }
+
+  useEffect(() => {
+    const keys = getOpenKeys(sidebarMenus, tabStore.tabActiveKey)
+    setOpenKeys(keys)
+  }, [tabStore.tabActiveKey])
+
+  const onOpenChange = (openKeys: string[]) => {
+    setOpenKeys(openKeys)
   }
 
   return (
-    <div className="overflow-hidden relative flex flex-col">
-      <div className="py-2 px-2 flex items-center text-center">
+    <div
+      className={classNames('overflow-hidden relative flex flex-col w-[200px]', {
+        '!w-[80px]': !openSidebar,
+      })}
+    >
+      <div
+        className={classNames('p-2 flex items-center text-center', {
+          'justify-center': !openSidebar,
+        })}
+      >
         <img
           src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
           alt=""
           className="w-[35px] h-[35px]"
         />
-        <span className="ml-2">OPEN POS</span>
+        {openSidebar ? <span className="ml-2">OPEN POS</span> : null}
       </div>
 
       <Menu
-        className="!w-[200px] h-full flex-1 overflow-hidden overflow-y-auto"
+        className="h-full flex-1 overflow-hidden overflow-y-auto"
         onClick={onClick}
-        defaultSelectedKeys={['1']}
-        defaultOpenKeys={['sub1']}
+        selectedKeys={[tabStore.tabActiveKey]}
+        openKeys={openKeys}
         mode="inline"
-        items={items}
+        inlineCollapsed={!openSidebar}
+        items={sidebarMenus}
+        onOpenChange={onOpenChange}
       />
     </div>
   )

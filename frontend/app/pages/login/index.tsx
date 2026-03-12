@@ -3,6 +3,7 @@ import styles from './style.module.scss'
 import type { FormProps } from 'antd'
 import { Button, Checkbox, Form, Input } from 'antd'
 import Footer from '~/components/footer'
+import { useNavigate } from 'react-router'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: `登陆 - ${import.meta.env.VITE_TITLE}` }]
@@ -15,7 +16,10 @@ type FieldType = {
 }
 
 export default function Login() {
+  const navigate = useNavigate()
+
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+    navigate('/home/dashboard')
     console.log('Success:', values)
   }
 
