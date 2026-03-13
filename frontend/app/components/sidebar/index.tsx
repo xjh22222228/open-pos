@@ -15,7 +15,6 @@ export default function Sidebar() {
 
   const onClick: MenuProps['onClick'] = (e) => {
     if (tabStore.tabActiveKey !== e.key) {
-      tabStore.addTab(e.key)
       navigate(e.key)
     }
   }
@@ -47,7 +46,7 @@ export default function Sidebar() {
 
   useEffect(() => {
     const keys = getOpenKeys(sidebarMenus, tabStore.tabActiveKey)
-    setOpenKeys(keys)
+    setOpenKeys([...openKeys, ...keys])
   }, [tabStore.tabActiveKey])
 
   const onOpenChange = (openKeys: string[]) => {

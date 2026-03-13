@@ -22,7 +22,7 @@ export default function ChangePassword() {
   }
 
   return (
-    <div className="p-2.5">
+    <div className="p-2.5 h-full bg-white">
       <Title level={3}>修改密码</Title>
 
       <Form
@@ -31,7 +31,6 @@ export default function ChangePassword() {
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 18 }}
         style={{ maxWidth: 600 }}
-        initialValues={{ remember: true }}
         onFinish={onFinish}
         autoComplete="off"
       >

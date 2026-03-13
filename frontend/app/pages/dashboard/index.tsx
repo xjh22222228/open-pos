@@ -1,9 +1,14 @@
-import styles from './style.module.scss'
+import styles from './index.module.scss'
+import Number from './number'
 
 export function meta() {
-  return [{ title: `仪表盘 - ${import.meta.env.VITE_TITLE}` }]
+  return [{ title: `系统主页 - ${import.meta.env.VITE_TITLE}` }]
 }
 
 export default function Dashboard() {
-  return <div>123</div>
+  return (
+    <div>
+      <Number />
+    </div>
+  )
 }

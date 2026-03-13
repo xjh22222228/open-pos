@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './assets/font/iconfont.css';
 
 body {
   user-select: none;

@@ -1,0 +1,31 @@
+.number {
+  margin-bottom: 15px;
+  .block-item {
+    display: flex;
+    padding: 10px 15px;
+    background: #fff;
+    cursor: pointer;
+  }
+}
+
+.data {
+  padding-top: 10px;
+  text-align: right;
+  align-self: center;
+  font-size: 26px;
+  color: #000;
+  font-weight: bold;
+  flex: 1;
+  .title {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 5px;
+  }
+}
+
+.icon {
+  font-size: 40px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

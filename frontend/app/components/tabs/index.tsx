@@ -1,13 +1,16 @@
 import React from 'react'
 import { Tabs } from 'antd'
 import useTabStore from '~/stores/tabStore'
+import { useNavigate } from 'react-router'
 
 type TargetKey = React.MouseEvent | React.KeyboardEvent | string
 
 const TabsComponent: React.FC = () => {
+  const navigate = useNavigate()
   const tabStore = useTabStore((state) => state)
 
   const onChange = (key: string) => {
+    navigate(key)
     tabStore.setTabActiveKey(key)
   }
 
@@ -18,7 +21,7 @@ const TabsComponent: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="bg-white">
       <Tabs
         hideAdd
         onChange={onChange}

@@ -28,3 +28,8 @@ export function getTabs(): TabProps[] {
     return []
   }
 }
+
+export function logout() {
+  localStorage.clear()
+  sessionStorage.clear()
+}

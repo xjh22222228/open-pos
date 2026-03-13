@@ -8,7 +8,7 @@ type MenuItem = Required<MenuProps>['items'][number]
 const items: MenuItem[] = [
   {
     key: '/home/dashboard',
-    label: '系统首页',
+    label: '系统主页',
     icon: <HomeOutlined />,
   },
   {
@@ -16,6 +16,7 @@ const items: MenuItem[] = [
     label: '系统管理',
     icon: <SettingOutlined />,
     children: [
+      { key: '/home/personal-Info', label: '个人信息' },
       { key: '/home/system-settings', label: '系统设置' },
       { key: '/home/change-password', label: '修改密码' },
     ],

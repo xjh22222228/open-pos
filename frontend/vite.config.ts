@@ -1,11 +1,9 @@
 import { reactRouter } from '@react-router/dev/vite'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'vite'
-import tsconfigPaths from 'vite-tsconfig-paths'
-import path from 'node:path'
 
 export default defineConfig({
-  plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+  plugins: [tailwindcss(), reactRouter()],
 
   define: {
     'import.meta.env.VITE_TITLE': '"OPEN POS"',
@@ -16,9 +14,8 @@ export default defineConfig({
   },
 
   resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'app'),
-    },
+    tsconfigPaths: true,
+    alias: {},
   },
 
   build: {
