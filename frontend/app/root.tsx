@@ -2,6 +2,11 @@ import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration }
 import type { Route } from './+types/root'
 import './app.css'
 
+const isClient = import.meta.env.VITE_CLIENT
+
+const bodyClass = isClient ? 'select-none' : ''
+
+
 export const links: Route.LinksFunction = () => []
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -13,7 +18,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className={bodyClass}>
         {children}
         <ScrollRestoration />
         <Scripts />

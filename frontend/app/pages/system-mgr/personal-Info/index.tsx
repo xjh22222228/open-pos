@@ -22,6 +22,7 @@ type FieldType = {
   avatar: string
   name: string
   phone: string
+  email: string
   workDays: BusinessDays[]
   workHours: [string, string][]
 }
@@ -99,6 +100,11 @@ export default function SystemSettings() {
       {
         label: '联系电话',
         name: 'phone',
+        component: <Input />,
+      },
+      {
+        label: '电子邮箱',
+        name: 'email',
         component: <Input />,
       },
       {

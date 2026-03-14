@@ -73,7 +73,7 @@ export default function Sidebar() {
       </div>
 
       <Menu
-        className="h-full flex-1 overflow-hidden overflow-y-auto"
+        className="h-full flex-1 overflow-hidden overflow-y-auto select-none"
         onClick={onClick}
         selectedKeys={[tabStore.tabActiveKey]}
         openKeys={openKeys}

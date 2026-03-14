@@ -9,7 +9,9 @@
   "type": "module",
   "scripts": {
     "build": "react-router build",
-    "dev": "npm run fmt && react-router dev",
+    "build:client": "react-router build --mode clientProd",
+    "dev": "npm run fmt && react-router dev --mode dev",
+    "dev:client": "npm run fmt && react-router dev --mode clientDev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
     "fmt": "oxfmt"

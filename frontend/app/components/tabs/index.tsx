@@ -21,7 +21,7 @@ const TabsComponent: React.FC = () => {
   }
 
   return (
-    <div className="bg-white">
+    <div className="bg-white select-none">
       <Tabs
         hideAdd
         onChange={onChange}
