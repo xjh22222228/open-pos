@@ -1,4 +1,5 @@
 package login
+
 import (
 	"context"
 	"encoding/json"
@@ -49,7 +50,7 @@ func (s *LoginService) Authenticate(tenantCode, username, password string) (*mod
 
 	// 2. 校验用户是否存在
 	var u models.ErpUser
-	if err := s.db.Where("tenant_id = ? AND username = ?", t.ID, username).First(&u).Error; err != nil {
+	if err := s.db.Where("tenant_id = ? AND username = ?", t.TenantId, username).First(&u).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("用户名或密码错误")
 		}
@@ -59,7 +60,7 @@ func (s *LoginService) Authenticate(tenantCode, username, password string) (*mod
 	// 3. 校验密码 (假设请求传过来的是 SHA512，数据库存的是 bcrypt)
 	// 注意：实际生产中建议在 Service 层处理 bcrypt 校验
 	if !cryptoutils.CheckPassword(u.Password, password) {
-		return nil, errors.New("用户名或密码错误")
+		return nil, errors.New("用户名或密码错误.")
 	}
 
 	if u.Status != 1 {

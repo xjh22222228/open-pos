@@ -31,7 +31,11 @@ func (s *TenantService) Register(tenantCode, username, password string) error {
 		}
 
 		// 2. 创建租户
+		tenantId := uint64(cryptoutils.RandomSonyflake())
 		newTenant := models.ErpTenant{
+			CommonModel: models.CommonModel{
+				TenantId: tenantId,
+			},
 			TenantCode: tenantCode,
 			TenantName: fmt.Sprintf("租户_%s", tenantCode), // 默认名称
 			Status:     1,                                  // 正常
@@ -40,30 +44,36 @@ func (s *TenantService) Register(tenantCode, username, password string) error {
 			return err
 		}
 
-		// 更新 TenantId
-		tx.Model(&newTenant).Update("tenant_id", newTenant.ID)
-
 		// 3. 创建默认门店
 		newStore := models.ErpStore{
+			BaseCommonModel: models.BaseCommonModel{
+				CommonModel: models.CommonModel{
+					TenantId: tenantId,
+				},
+			},
 			StoreName: "默认门店",
 			Status:    1,
 		}
-		newStore.TenantId = newTenant.ID
 		if err := tx.Create(&newStore).Error; err != nil {
 			return err
 		}
+		// 更新 StoreId
 		tx.Model(&newStore).Update("store_id", newStore.ID)
 
 		// 4. 创建管理员用户
 		hashedPassword, _ := cryptoutils.HashPassword(password)
 		adminUser := models.ErpUser{
+			BaseCommonModel: models.BaseCommonModel{
+				CommonModel: models.CommonModel{
+					TenantId: tenantId,
+				},
+				StoreId: newStore.ID,
+			},
 			Username: username,
 			Password: hashedPassword,
 			RealName: "管理员",
 			Status:   1,
 		}
-		adminUser.TenantId = newTenant.ID
-		adminUser.StoreId = newStore.ID
 		
 		if err := tx.Create(&adminUser).Error; err != nil {
 			return err

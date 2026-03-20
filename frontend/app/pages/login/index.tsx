@@ -2,9 +2,10 @@ import { useState } from 'react'
 import type { Route } from '../../+types/root'
 import styles from './style.module.scss'
 import type { FormProps } from 'antd'
-import { Button, Checkbox, Form, Input } from 'antd'
+import { Button, Checkbox, Form, Input, message } from 'antd'
 import Footer from '~/components/footer'
 import { useNavigate } from 'react-router'
+import useUserStore from '~/stores/userStore'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: `登陆 - ${import.meta.env.VITE_TITLE}` }]
@@ -19,10 +20,24 @@ type FieldType = {
 
 export default function Login() {
   const navigate = useNavigate()
+  const { userLogin } = useUserStore()
+  const [loading, setLoading] = useState(false)
 
-  const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    navigate('/home/dashboard')
-    console.log('Success:', values)
+  const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    try {
+      setLoading(true)
+      await userLogin({
+        tenantCode: values.tenantCode,
+        username: values.username,
+        password: values.password,
+      })
+      message.success('登录成功')
+      navigate('/home/dashboard')
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -65,7 +80,7 @@ export default function Login() {
         </Form.Item>
 
         <Form.Item label={null}>
-          <Button type="primary" htmlType="submit" block>
+          <Button type="primary" htmlType="submit" block loading={loading}>
             登陆
           </Button>
         </Form.Item>

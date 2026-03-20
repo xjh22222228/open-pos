@@ -4,7 +4,11 @@ export interface TabProps {
 }
 
 // 用户信息
-export interface UserInfo {}
+export interface UserInfo {
+  id: number
+  username: string
+  realName: string
+}
 
 // 周一到周日
 export type BusinessDays = 1 | 2 | 3 | 4 | 5 | 6 | 7

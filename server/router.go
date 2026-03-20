@@ -3,7 +3,9 @@ package server
 import (
 	"fmt"
 	"log"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/xjh22222228/open-erp/server/config"
 	"github.com/xjh22222228/open-erp/server/internal/middleware"
@@ -12,6 +14,16 @@ import (
 
 func RouterRun() {
 	r := gin.Default()
+
+	// 基础跨域配置：允许所有来源、方法和 Header
+	r.Use(cors.New(cors.Config{
+		AllowAllOrigins:  true,
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	// 基础 API V1 组
 	v1 := r.Group("/api/v1")

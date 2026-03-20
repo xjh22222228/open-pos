@@ -25,7 +25,7 @@ func SignController(c *gin.Context) {
 	loginSrv := NewLoginService()
 	u, err := loginSrv.Authenticate(req.TenantCode, req.Username, req.Password)
 	if err != nil {
-		resp.Error(401, err.Error())
+		resp.Error(403, err.Error())
 		return
 	}
 

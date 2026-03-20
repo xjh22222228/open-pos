@@ -8,7 +8,7 @@ import (
 
 type CommonModel struct {
 	ID        uint      `gorm:"primarykey"`
-	TenantId  uint      `gorm:"type:int;not null;uniqueIndex:uk_tenant_key;comment:租户唯一标识（系统内部，不可变）"`
+	TenantId  uint64    `gorm:"type:bigint;not null;uniqueIndex:uk_tenant_key;comment:租户唯一标识（雪花算法ID）"`
 	CreatedAt time.Time `gorm:"autoCreateTime;type:datetime;not null;default:CURRENT_TIMESTAMP;comment:创建时间"`
 	UpdatedAt time.Time `gorm:"autoCreateTime;type:datetime;not null;default:CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;comment:更新时间"`
 }
