@@ -8,7 +8,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
-	"github.com/xjh22222228/open-pos/server"
+	"github.com/xjh22222228/open-erp/server"
 )
 
 //go:embed all:frontend/dist/client

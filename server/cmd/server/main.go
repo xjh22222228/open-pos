@@ -1,8 +1,7 @@
 package main
 
-import "fmt"
+import "github.com/xjh22222228/open-erp/server"
 
 func main() {
-	fmt.Println("hello world")
-	
+	server.Run()
 }

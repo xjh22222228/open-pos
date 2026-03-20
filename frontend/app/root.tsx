@@ -6,7 +6,6 @@ const isClient = import.meta.env.VITE_CLIENT
 
 const bodyClass = isClient ? 'select-none' : ''
 
-
 export const links: Route.LinksFunction = () => []
 
 export function Layout({ children }: { children: React.ReactNode }) {

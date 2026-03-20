@@ -11,9 +11,10 @@ export function meta({}: Route.MetaArgs) {
 }
 
 type FieldType = {
-  username?: string
-  password?: string
-  remember?: string
+  tenantCode: string
+  username: string
+  password: string
+  remember: string
 }
 
 export default function Login() {
@@ -35,6 +36,14 @@ export default function Login() {
         onFinish={onFinish}
         autoComplete="off"
       >
+        <Form.Item<FieldType>
+          label="租户编码"
+          name="tenantCode"
+          rules={[{ required: true, message: '请输入租户编码!' }]}
+        >
+          <Input />
+        </Form.Item>
+
         <Form.Item<FieldType>
           label="用户名"
           name="username"
