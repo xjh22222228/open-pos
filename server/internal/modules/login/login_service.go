@@ -13,8 +13,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// ... (existing code)
-
 // CreateSession 创建会话：存入 Redis，有效期 30 天
 func (s *LoginService) CreateSession(token string, u *models.ErpUser) error {
 	ctx := context.Background()
@@ -57,8 +55,7 @@ func (s *LoginService) Authenticate(tenantCode, username, password string) (*mod
 		return nil, err
 	}
 
-	// 3. 校验密码 (假设请求传过来的是 SHA512，数据库存的是 bcrypt)
-	// 注意：实际生产中建议在 Service 层处理 bcrypt 校验
+	// 3. 校验密码 
 	if !cryptoutils.CheckPassword(u.Password, password) {
 		return nil, errors.New("用户名或密码错误.")
 	}

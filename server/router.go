@@ -9,6 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/xjh22222228/open-erp/server/config"
 	"github.com/xjh22222228/open-erp/server/internal/middleware"
+	"github.com/xjh22222228/open-erp/server/internal/modules/category"
+	"github.com/xjh22222228/open-erp/server/internal/modules/goods"
 	"github.com/xjh22222228/open-erp/server/internal/modules/login"
 )
 
@@ -25,6 +27,7 @@ func RouterRun() {
 		MaxAge:           12 * time.Hour,
 	}))
 
+	// 全部接口需要采用 POST 请求
 	// 基础 API V1 组
 	v1 := r.Group("/api/v1")
 
@@ -37,9 +40,8 @@ func RouterRun() {
 	auth := v1.Group("/")
 	auth.Use(middleware.AuthMiddleware())
 	{
-		// 此处后续可以添加如：
-		// user.Routes(auth)
-		// store.Routes(auth)
+		category.Routes(auth)
+		goods.Routes(auth)
 	}
 
 	port := config.GlobalConfig.Server.Port

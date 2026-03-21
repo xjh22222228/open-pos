@@ -43,38 +43,34 @@ func (s *TenantService) Register(tenantCode, username, password string) error {
 		if err := tx.Create(&newTenant).Error; err != nil {
 			return err
 		}
-
-		// 3. 创建默认门店
-		newStore := models.ErpStore{
-			BaseCommonModel: models.BaseCommonModel{
-				CommonModel: models.CommonModel{
-					TenantId: tenantId,
-				},
-			},
-			StoreName: "默认门店",
-			Status:    1,
-		}
-		if err := tx.Create(&newStore).Error; err != nil {
-			return err
-		}
-		// 更新 StoreId
-		tx.Model(&newStore).Update("store_id", newStore.ID)
+// 3. 创建默认门店
+storeId := uint64(cryptoutils.RandomSonyflake())
+newStore := models.ErpStore{
+	BaseCommonModel: models.BaseCommonModel{
+		CommonModel: models.CommonModel{
+			TenantId: tenantId,
+		},
+		StoreId: storeId,
+	},
+	StoreName: "默认门店",
+	Status:    1,
+}
+if err := tx.Create(&newStore).Error; err != nil {
+	return err
+}
 
 		// 4. 创建管理员用户
 		hashedPassword, _ := cryptoutils.HashPassword(password)
 		adminUser := models.ErpUser{
-			BaseCommonModel: models.BaseCommonModel{
-				CommonModel: models.CommonModel{
-					TenantId: tenantId,
-				},
-				StoreId: newStore.ID,
+			CommonModel: models.CommonModel{
+				TenantId: tenantId,
 			},
+			StoreId:  storeId,
 			Username: username,
 			Password: hashedPassword,
 			RealName: "管理员",
 			Status:   1,
 		}
-		
 		if err := tx.Create(&adminUser).Error; err != nil {
 			return err
 		}

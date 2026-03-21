@@ -14,6 +14,8 @@ type ErpStore struct {
 	OpenTime  *time.Time `gorm:"type:time;default:null;comment:营业开始时间"`
 	CloseTime *time.Time `gorm:"type:time;default:null;comment:营业结束时间"`
 
+	PayMethods string `gorm:"type:json;comment:支持的支付方式: [1,2,3]"`
+
 	ContactPerson string `gorm:"size:50;default:'';comment:门店联系人"`
 	ContactPhone  string `gorm:"size:20;default:'';comment:门店联系电话"`
 }

@@ -8,7 +8,7 @@ import (
 
 type CommonModel struct {
 	ID        uint      `gorm:"primarykey"`
-	TenantId  uint64    `gorm:"type:bigint;not null;uniqueIndex:uk_tenant_key;comment:租户唯一标识（雪花算法ID）"`
+	TenantId  uint64    `gorm:"type:bigint;not null;comment:租户唯一标识（雪花算法ID）"`
 	CreatedAt time.Time `gorm:"autoCreateTime;type:datetime;not null;default:CURRENT_TIMESTAMP;comment:创建时间"`
 	UpdatedAt time.Time `gorm:"autoCreateTime;type:datetime;not null;default:CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;comment:更新时间"`
 }
@@ -16,7 +16,7 @@ type CommonModel struct {
 // BaseCommonModel 除了租户表，用户表，其他所有表都应该继承
 type BaseCommonModel struct {
 	CommonModel
-	StoreId uint `gorm:"type:int;not null;comment:门店ID"`
+	StoreId uint64 `gorm:"type:bigint;not null;comment:门店ID"`
 }
 
 type DeletedAt struct {

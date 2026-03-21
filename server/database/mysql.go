@@ -8,11 +8,11 @@ import (
 	"github.com/xjh22222228/open-erp/server/internal/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	)
+)
 
-	var SqlDB *gorm.DB
+var SqlDB *gorm.DB
 
-	func MySqlStart() {
+func MySqlStart() {
 	var err error
 	c := config.GlobalConfig.MySQL
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=True&loc=Local",
@@ -30,8 +30,10 @@ import (
 		&models.ErpTenant{},
 		&models.ErpStore{},
 		&models.ErpUser{},
+		&models.ErpCategory{},
+		&models.ErpGoods{},
 	)
 	if err != nil {
 		log.Panicf("数据库迁移失败: %v", err)
 	}
-	}
+}

@@ -4,9 +4,10 @@ import "time"
 
 // ErpUser 用户表
 type ErpUser struct {
-	BaseCommonModel
+	CommonModel
 	DeletedAt
 
+	StoreId uint64 `gorm:"type:bigint;comment:门店ID"`
 	Username string `gorm:"type:varchar(50);not null;comment:登录账号"`
 	Password string `gorm:"type:varchar(100);not null;comment:登录密码"`
 	RealName string `gorm:"type:varchar(50);comment:真实姓名"`
