@@ -29,9 +29,11 @@ func MySqlStart() {
 	err = SqlDB.AutoMigrate(
 		&models.ErpTenant{},
 		&models.ErpStore{},
+		&models.ErpRole{},
 		&models.ErpUser{},
 		&models.ErpCategory{},
 		&models.ErpGoods{},
+		&models.ErpInventory{},
 	)
 	if err != nil {
 		log.Panicf("数据库迁移失败: %v", err)

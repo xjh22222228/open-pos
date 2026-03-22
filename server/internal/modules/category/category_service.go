@@ -138,6 +138,17 @@ func (s *CategoryService) Delete(tenantId, storeId, categoryId uint64) error {
 		return errors.New("请先删除子类目")
 	}
 
+	// 2. 校验该分类下是否存在商品
+	var goodsCount int64
+	if err := s.db.Model(&models.ErpGoods{}).
+		Where("tenant_id = ? AND store_id = ? AND category_id = ?", tenantId, storeId, categoryId).
+		Count(&goodsCount).Error; err != nil {
+		return err
+	}
+	if goodsCount > 0 {
+		return errors.New("该分类下存在商品，不允许删除")
+	}
+
 	res := s.db.Where("tenant_id = ? AND store_id = ? AND category_id = ?", tenantId, storeId, categoryId).Delete(&models.ErpCategory{})
 	if res.Error != nil {
 		return res.Error

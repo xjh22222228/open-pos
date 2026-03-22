@@ -60,12 +60,14 @@ if err := tx.Create(&newStore).Error; err != nil {
 }
 
 		// 4. 创建管理员用户
+		userId := uint64(cryptoutils.RandomSonyflake())
 		hashedPassword, _ := cryptoutils.HashPassword(password)
 		adminUser := models.ErpUser{
 			CommonModel: models.CommonModel{
 				TenantId: tenantId,
 			},
 			StoreId:  storeId,
+			UserId:   userId,
 			Username: username,
 			Password: hashedPassword,
 			RealName: "管理员",

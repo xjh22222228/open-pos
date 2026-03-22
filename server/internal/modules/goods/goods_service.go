@@ -19,38 +19,31 @@ func NewGoodsService() *GoodsService {
 
 type CreateGoodsInput struct {
 	TenantId      uint64
-	StoreId       uint64
 	CategoryId    uint64
 	GoodsName     string
 	Barcode       string
 	SalePrice     float64
 	PurchasePrice float64
-	StockQuantity int64
 	Status        uint8
 	Remark        string
 }
 
 type UpdateGoodsInput struct {
 	TenantId      uint64
-	StoreId       uint64
 	GoodsId       uint64
 	CategoryId    uint64
 	GoodsName     string
 	Barcode       string
 	SalePrice     float64
 	PurchasePrice float64
-	StockQuantity int64
 	Status        uint8
 	Remark        string
 }
 
 func (s *GoodsService) Create(in CreateGoodsInput) (*models.ErpGoods, error) {
 	goods := models.ErpGoods{
-		BaseCommonModel: models.BaseCommonModel{
-			CommonModel: models.CommonModel{
-				TenantId: in.TenantId,
-			},
-			StoreId: in.StoreId,
+		CommonModel: models.CommonModel{
+			TenantId: in.TenantId,
 		},
 		GoodsId:       uint64(cryptoutils.RandomSonyflake()),
 		CategoryId:    in.CategoryId,
@@ -58,7 +51,6 @@ func (s *GoodsService) Create(in CreateGoodsInput) (*models.ErpGoods, error) {
 		Barcode:       in.Barcode,
 		SalePrice:     in.SalePrice,
 		PurchasePrice: in.PurchasePrice,
-		StockQuantity: in.StockQuantity,
 		Status:        in.Status,
 		Remark:        in.Remark,
 	}
@@ -70,14 +62,13 @@ func (s *GoodsService) Create(in CreateGoodsInput) (*models.ErpGoods, error) {
 
 func (s *GoodsService) Update(in UpdateGoodsInput) error {
 	res := s.db.Model(&models.ErpGoods{}).
-		Where("tenant_id = ? AND store_id = ? AND goods_id = ?", in.TenantId, in.StoreId, in.GoodsId).
+		Where("tenant_id = ? AND goods_id = ?", in.TenantId, in.GoodsId).
 		Updates(map[string]any{
 			"category_id":    in.CategoryId,
 			"goods_name":     in.GoodsName,
 			"barcode":        in.Barcode,
 			"sale_price":     in.SalePrice,
 			"purchase_price": in.PurchasePrice,
-			"stock_quantity": in.StockQuantity,
 			"status":         in.Status,
 			"remark":         in.Remark,
 		})
@@ -91,8 +82,8 @@ func (s *GoodsService) Update(in UpdateGoodsInput) error {
 	return nil
 }
 
-func (s *GoodsService) Delete(tenantId, storeId, goodsId uint64) error {
-	res := s.db.Where("tenant_id = ? AND store_id = ? AND goods_id = ?", tenantId, storeId, goodsId).
+func (s *GoodsService) Delete(tenantId, goodsId uint64) error {
+	res := s.db.Where("tenant_id = ? AND goods_id = ?", tenantId, goodsId).
 		Delete(&models.ErpGoods{})
 
 	if res.Error != nil {
@@ -106,7 +97,6 @@ func (s *GoodsService) Delete(tenantId, storeId, goodsId uint64) error {
 
 type ListParams struct {
 	TenantId   uint64
-	StoreId    uint64
 	GoodsName  string
 	CategoryId uint64
 	Page       int
@@ -124,7 +114,7 @@ func (s *GoodsService) List(p ListParams) (*ListResult, error) {
 	var goods []models.ErpGoods
 	var total int64
 
-	db := s.db.Model(&models.ErpGoods{}).Where("tenant_id = ? AND store_id = ?", p.TenantId, p.StoreId)
+	db := s.db.Model(&models.ErpGoods{}).Where("tenant_id = ?", p.TenantId)
 
 	if p.GoodsName != "" {
 		db = db.Where("goods_name LIKE ?", "%"+p.GoodsName+"%")

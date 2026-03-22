@@ -1,8 +1,8 @@
 package models
 
-// ErpGoods 商品表
+// ErpGoods 商品表（租户级共享）
 type ErpGoods struct {
-	BaseCommonModel
+	CommonModel // 仅包含 TenantId
 	DeletedAt
 
 	GoodsId    uint64 `gorm:"type:bigint;not null;uniqueIndex:uk_goods_id;comment:商品唯一标识(雪花ID)"`
@@ -13,7 +13,6 @@ type ErpGoods struct {
 
 	SalePrice     float64 `gorm:"type:decimal(10,2);not null;default:0.00;comment:零售价"`
 	PurchasePrice float64 `gorm:"type:decimal(10,2);not null;default:0.00;comment:进价"`
-	StockQuantity int64   `gorm:"type:bigint;not null;default:0;comment:当前库存(整数)"`
 
 	Status uint8  `gorm:"type:tinyint;not null;default:1;comment:状态: 1上架 0下架"`
 	Remark string `gorm:"type:varchar(255);default:'';comment:备注"`

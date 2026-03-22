@@ -13,7 +13,6 @@ type SaveGoodsRequest struct {
 	Barcode       string  `json:"barcode"`
 	SalePrice     float64 `json:"salePrice"`
 	PurchasePrice float64 `json:"purchasePrice"`
-	StockQuantity int64   `json:"stockQuantity"`
 	Status        uint8   `json:"status"`
 	Remark        string  `json:"remark"`
 }
@@ -42,13 +41,11 @@ func CreateController(c *gin.Context) {
 	service := NewGoodsService()
 	goods, err := service.Create(CreateGoodsInput{
 		TenantId:      currentUser.TenantId,
-		StoreId:       currentUser.StoreId,
 		CategoryId:    req.CategoryId,
 		GoodsName:     req.GoodsName,
 		Barcode:       req.Barcode,
 		SalePrice:     req.SalePrice,
 		PurchasePrice: req.PurchasePrice,
-		StockQuantity: req.StockQuantity,
 		Status:        req.Status,
 		Remark:        req.Remark,
 	})
@@ -78,14 +75,12 @@ func UpdateController(c *gin.Context) {
 	service := NewGoodsService()
 	err := service.Update(UpdateGoodsInput{
 		TenantId:      currentUser.TenantId,
-		StoreId:       currentUser.StoreId,
 		GoodsId:       req.GoodsId,
 		CategoryId:    req.CategoryId,
 		GoodsName:     req.GoodsName,
 		Barcode:       req.Barcode,
 		SalePrice:     req.SalePrice,
 		PurchasePrice: req.PurchasePrice,
-		StockQuantity: req.StockQuantity,
 		Status:        req.Status,
 		Remark:        req.Remark,
 	})
@@ -108,7 +103,7 @@ func DeleteController(c *gin.Context) {
 	}
 
 	service := NewGoodsService()
-	if err := service.Delete(currentUser.TenantId, currentUser.StoreId, req.GoodsId); err != nil {
+	if err := service.Delete(currentUser.TenantId, req.GoodsId); err != nil {
 		resp.Error(500, err.Error())
 		return
 	}
@@ -136,7 +131,6 @@ func ListController(c *gin.Context) {
 	service := NewGoodsService()
 	result, err := service.List(ListParams{
 		TenantId:   currentUser.TenantId,
-		StoreId:    currentUser.StoreId,
 		GoodsName:  req.GoodsName,
 		CategoryId: req.CategoryId,
 		Page:       req.Page,
